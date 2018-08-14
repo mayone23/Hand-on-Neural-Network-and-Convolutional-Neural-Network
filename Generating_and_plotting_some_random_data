@@ -6,7 +6,8 @@ Created on Tue Aug 14 10:43:10 2018
 @author: ankitjha
 """
 
-#Generating some dataset
+#Generating some dataset.
+#These codes are implemented with the help of CS231n Stanford University Course.
 import numpy as np, matplotlib.pyplot as plt 
 #number of points per class
 N=100
@@ -26,4 +27,5 @@ for i in range(K):
     y[ix]=i
 
 plt.scatter(x[:,0],x[:,1],c=y,s=10,cmap=plt.cm.Spectral)
+#c= color code , s=size of the data samples
 plt.show()
