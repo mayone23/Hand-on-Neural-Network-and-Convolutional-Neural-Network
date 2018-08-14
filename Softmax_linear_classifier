@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 14 11:34:44 2018
+
+@author: ankitjha
+"""
+import numpy as np, matplotlib.pyplot as plt
+#Number of points per class
+N=100
+#Dimentionality is 2
+D=2
+#Number of classes
+K=3
+reg=1e-3
+x=np.zeros((N*K,D)) 
+y=np.zeros(N*K, dtype='uint8')
+
+for i in range(K):
+    ix=range(N*i,N*(i+1))
+    #radius
+    r=np.linspace(0,0.1,N) 
+    t=np.linspace(i*4,(i+1)*4,N)+np.random.randn(N)*0.2
+    x[ix]=np.c_[r*np.sin(t),r*np.cos(t)]
+    y[ix]=i
+
+#initialize the parameters (weights and biases) randomly
+
+w=0.001*np.random.randn(D,K)#weights
+b=np.zeros((1,K))#biases
+
+num_egs=x.shape[0]
+
+for i in range(10000000):
+    
+#computing the class score
+    scores=np.dot(x,w)+b #f(Xi,Wi)=summation(Wi*Xi)+b
+
+#computing the loss (we will use mainly softmax loss function to evaluate the loss)
+    e_scores=np.exp(scores)
+    probs=e_scores/np.sum(e_scores,axis=1,keepdims=True)
+
+    correct_logprobs = -np.log(probs[range(num_egs),y])
+
+#Average cross-entropy and regularization
+    data_loss=np.sum(correct_logprobs)/num_egs
+    reg_loss=0.5*reg*np.sum(w*w)
+    loss=data_loss+reg_loss
+    
+    if i% 10==0:
+        print('iteration %d: loss %f'% (i,loss))
+
+#computing the analytic gradient with backpropagation
+    dscores=probs
+    dscores[range(num_egs),y]-=1
+    dscores/=num_egs
+
+#gradient calculation
+    dw=np.dot(x.T,dscores)
+    db=np.sum(dscores,axis=0,keepdims=True)
+    dw += reg*w
+
+
+#perform a parameter update
+    step_size=1e-0
+    w += -step_size * dw
+    b += -step_size * db
