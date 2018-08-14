@@ -29,3 +29,4 @@ for i in range(K):
 plt.scatter(x[:,0],x[:,1],c=y,s=10,cmap=plt.cm.Spectral)
 #c= color code , s=size of the data samples
 plt.show()
+#After plotting it, we will get to know that, the complexity to seperate the class linearly is become high as the number of classes incresases. 
