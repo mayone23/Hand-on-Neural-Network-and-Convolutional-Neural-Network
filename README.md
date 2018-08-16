@@ -6,7 +6,7 @@ Hand on Neural-Network
 	
 Network Layer Parameters:
 	
-	1. Input Layer: It depends upon the shape of training data. The numberof feature column is equal to the number of neurons in that layer. To provide flexibility in the network or to overcome the network from being dead due to zero inputs in between, the bias term is used.
+	1. Input Layer: It depends upon the shape of training data. The number of feature column is equal to the number of neurons in that layer. To provide flexibility in the network or to overcome the network from being dead due to zero inputs in between, the bias term is used.
 	
 	2. Output Layer: It depends upon the type of model configuration.
 	If our model is regression model then the output layer will have only one output node and if our model is based on classification then the number of output layer is the number of classes or number of different labels. So, it is completely depends upon the type of model we have choosed.
