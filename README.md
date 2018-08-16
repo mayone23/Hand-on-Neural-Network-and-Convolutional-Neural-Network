@@ -1,9 +1,9 @@
-	Hand on Neural-Network
+Hand on Neural-Network
 	Scratch coding for those who are new to Neural Network like me.. :)
 	This repo includes the basic code to use python with tensorflow/keras for Neural Network implementation.
 	The codes or the methods are implemented using CS231n course of Standford University.
 	
-	Network Layer Parameters:
+Network Layer Parameters:
 	
 	1. Input Layer: It depends upon the shape of training data. The numberof feature column is equal to the number of neurons in that layer. To provide flexibility in the network or to overcome the network from being dead due to zero inputs in between, the bias term is used.
 	
