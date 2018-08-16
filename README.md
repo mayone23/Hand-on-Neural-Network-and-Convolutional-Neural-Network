@@ -13,3 +13,4 @@
 	3. Hidden Layer: This is the most important portion of the Neural Network. There is no hard and fast rules in choosing number of neurons and number of hidden layers. But, if we follow some of the basic tricks or techniques then the modle accuracy can be very much affected. So, here is the techniques/tricks:
 	If our dataset is linearly seperable then twe don't need any hidden layers and we don't need any Neural Network at all to resolve the task. But if the dataset is not linearly seperable then we do need a Neural Network with proper configuration. Therefore, the optimal size of hidden layer is in between the input layer and output layer. 
 
+Transfer Learning:
