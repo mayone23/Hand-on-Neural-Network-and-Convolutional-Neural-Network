@@ -1,4 +1,4 @@
-Hand on Neural-Network using Pyhton.
+Hand on Neural-Network using Python.
 
 	We are living in a world with Python and Anaconda..... Ha ha ha.... Jokes apart.
 
