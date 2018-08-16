@@ -16,7 +16,7 @@ Network Layer Parameters:
 	2. Output Layer: It depends upon the type of model configuration.If our model is regression model then
 	the output layer will have only one output node and if our model is based on classification then the 
 	number of output layer is the number of classes or number of different labels. So, it is completely 
-	depends upon the type of model we have choosed.
+	depends upon the type of model we have chosen.
 	
 	3. Hidden Layer: This is the most important portion of the Neural Network. There is no hard and fast 
 	rules in choosing number of neurons and number of hidden layers. But, if we follow some of the basic
@@ -34,3 +34,10 @@ Transfer Learning:
 	
 	It is a well known approach in deep learning where the pre-trained machine learninig models are used as the 
 	ignitition point or the starting point for the new machine learning models.
+	
+	For eg. in Convolution Neural Network sometime we used to chose the pre-trained models such as ImageNet, ResNet 
+	etc. for our new model. So, this comes under transfer learning.
+	
+	For further reading on transfer learning visit the following site: 
+	
+	https://machinelearningmastery.com/transfer-learning-for-deep-learning/
