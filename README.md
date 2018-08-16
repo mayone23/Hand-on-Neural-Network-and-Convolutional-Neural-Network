@@ -47,6 +47,18 @@ https://machinelearningmastery.com/transfer-learning-for-deep-learning/
 
 	For further reading on transfer learning visit the above mentioned site.
 	
+Need of Non-Linear activation functions?
 
+	In Neural Network without any non-linear function, no matter how many layers it had, it will simply act as a
+	single layer perceptron. Because summing these layers would give us an another layer with linear function. So,
+	to introdeuce non-linearity in the network, non-linear activation functions are used.
+	
+	Suppose if our data is linearly separable then the linear classifier is sufficient to classify the data, but if
+	our data is non-linear in nature then linear classifier will not able to produce the desired result. Here comes the 
+	need of non-linear activation functions to seperate that non-linear data. Some of the non-linear activation fuctions
+	are as follows:
+	
+	Tanh
+	logistic function etc.
 	
 
