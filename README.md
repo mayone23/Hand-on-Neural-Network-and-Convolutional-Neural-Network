@@ -35,9 +35,8 @@ Transfer Learning:
 	It is a well known approach in deep learning where the pre-trained machine learninig models are used as the 
 	ignitition point or the starting point for the new machine learning models.
 	
-	For eg. in Convolution Neural Network sometime we used to chose the pre-trained models such as ImageNet, ResNet 
+	For eg. in Convolution Neural Network sometime we used to choose the pre-trained models such as ImageNet, ResNet 
 	etc. for our new model. So, this comes under transfer learning.
 	
-	For further reading on transfer learning visit the following site: 
-	
-	https://machinelearningmastery.com/transfer-learning-for-deep-learning/
+	For further reading on transfer learning visit the following site: 	
+https://machinelearningmastery.com/transfer-learning-for-deep-learning/
