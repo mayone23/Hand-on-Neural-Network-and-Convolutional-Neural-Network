@@ -12,26 +12,41 @@ N=100
 D=2
 #Number of classes
 K=3
+step_size=1e-0
 reg=1e-3
 x=np.zeros((N*K,D)) 
 y=np.zeros(N*K, dtype='uint8')
 
+########################################################
+#If we want seemingly random numbers, do not set the seed.
+#If we have code that uses random numbers that you want to debug, however,
+#it can be very helpful to set the seed before each run so that the code 
+#does the same thing every time you run it.
+np.random.seed(0)
+##########################################################################
+
+#############################################################################
+################# DATA GENERATION ###########################################
 for i in range(K):
     ix=range(N*i,N*(i+1))
     #radius
-    r=np.linspace(0,0.1,N) 
+    r=np.linspace(0.0,1,N) 
     t=np.linspace(i*4,(i+1)*4,N)+np.random.randn(N)*0.2
-    x[ix]=np.c_[r*np.sin(t),r*np.cos(t)]
-    y[ix]=i
+    x[ix]=np.c_[r*np.sin(t),r*np.cos(t)]##stacking columnwise
+    y[ix]=i ##for data labeling
+fig=plt.figure
+plt.scatter(x[:,0],x[:,1],c=y,s=10,cmap=plt.cm.Spectral)
+#############################################################################
+################# DATA GENERATION END HERE ##################################
+    
 
-#initialize the parameters (weights and biases) randomly
-
-w=0.001*np.random.randn(D,K)#weights
+#######initialize the parameters (weights and biases) randomly###############
+w=0.01*np.random.randn(D,K)#weights
 b=np.zeros((1,K))#biases
+#############################################################################
 
 num_egs=x.shape[0]
-
-for i in range(10000000):
+for i in range(200):
     
 #computing the class score
     scores=np.dot(x,w)+b #f(Xi,Wi)=summation(Wi*Xi)+b
@@ -39,13 +54,12 @@ for i in range(10000000):
 #computing the loss (we will use mainly softmax loss function to evaluate the loss)
     e_scores=np.exp(scores)
     probs=e_scores/np.sum(e_scores,axis=1,keepdims=True)
-
     correct_logprobs = -np.log(probs[range(num_egs),y])
-
+    
 #Average cross-entropy and regularization
     data_loss=np.sum(correct_logprobs)/num_egs
     reg_loss=0.5*reg*np.sum(w*w)
-    loss=data_loss+reg_loss
+    loss = data_loss + reg_loss
     
     if i% 10==0:
         print('iteration %d: loss %f'% (i,loss))
@@ -55,13 +69,33 @@ for i in range(10000000):
     dscores[range(num_egs),y]-=1
     dscores/=num_egs
 
-#gradient calculation
+#gradient calculation for scores
     dw=np.dot(x.T,dscores)
     db=np.sum(dscores,axis=0,keepdims=True)
     dw += reg*w
 
 
-#perform a parameter update
-    step_size=1e-0
+#performing parameter update
     w += -step_size * dw
     b += -step_size * db
+    
+#######Evaluating Testing Accuracy##########################################
+scores=np.dot(x,w)+b
+predicted_class=np.argmax(scores,axis=1)
+print('taining accuracy: %2f' %(np.mean(predicted_class == y)))
+############################################################################
+
+# plot the resulting softmax classifier
+h = 0.02
+x_min, x_max = x[:, 0].min() - 1, x[:, 0].max() + 1
+y_min, y_max = x[:, 1].min() - 1, x[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                     np.arange(y_min, y_max, h))
+Z = np.dot(np.c_[xx.ravel(), yy.ravel()], w) + b
+Z = np.argmax(Z, axis=1)
+Z = Z.reshape(xx.shape)
+fig = plt.figure()
+plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral, alpha=0.8)
+plt.scatter(x[:, 0], x[:, 1], c=y, s=20, cmap=plt.cm.Spectral)
+plt.xlim(xx.min(), xx.max())
+plt.ylim(yy.min(), yy.max())
