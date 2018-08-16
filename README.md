@@ -1,4 +1,6 @@
-Hand on Neural-Network
+Hand on Neural-Network using Pyhton.
+
+	We are living in a world with Python and Anaconda..... Ha ha ha.... Jokes apart.
 
 	Coding from scratch for those who are new to Neural Network like me.. :) :p
 	
@@ -38,6 +40,12 @@ Transfer Learning:
 	For eg. in Convolution Neural Network sometime we used to choose the pre-trained models such as ImageNet, 
 	ResNet etc. for our new model. So, this comes under transfer learning.
 	
+	It is a short cut to get better performance or in saving time. But there is always the pros and cons of uisng 
+	pre-trained model or so called transfer learning. As mentioned in above line about its one of the pros. There
+	are some contraints such as taking arbitary Convulational layer out of the pre-trained machine learning models.
+	
 https://machinelearningmastery.com/transfer-learning-for-deep-learning/
 
 	For further reading on transfer learning visit the above mentioned site.
+	
+
