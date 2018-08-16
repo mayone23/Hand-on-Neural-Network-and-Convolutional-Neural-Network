@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Aug 15 11:23:37 2018
+
+@author: ankitjha
+"""
+import numpy as np, matplotlib.pyplot as plt
+
+D=2 # Dimensionality
+K=3 #Number of classes
+N=100 # Number of data points per class
+
+np.random.seed(0)
+
+x=np.zeros((N*K,D)) 
+y=np.zeros(N*K, dtype='uint8')
+
+
+
+#############################################################################
+################# DATA GENERATION ###########################################
+for i in range(K):
+    ix=range(N*i,N*(i+1))
+    #radius
+    r=np.linspace(0.0,1,N) 
+    t=np.linspace(i*4,(i+1)*4,N)+np.random.randn(N)*0.2
+    x[ix]=np.c_[r*np.sin(t),r*np.cos(t)]##stacking columnwise
+    y[ix]=i ##for data labeling
+    
+    
+############## Initializations of parameters randomly#############
+h = 150 #Size of hidden layer
+# The Neural Network is highly affected by the size of hidden layer.
+#According to my visualization, if there are so many number of classes thenwe should use,
+#more number of nidden layers but it should be in the order of 2^(n-1)
+w1 = 0.01 * np.random.randn(D,h)
+b1 = np.zeros((1,h))
+w2 = 0.01 * np.random.rand(h,K)
+b2 = np.zeros((1,K))
+step_size=1e-0
+reg=1e-3
+
+
+num_egs=x.shape[0]    
+for i in range(10000):
+############## Evaluating class scores with 2-Layer Neural Network#####
+    hidden_layer = np.maximum(0, np.dot(x,w1) + b1) # ReLU Activation
+    scores = np.dot(hidden_layer, w2) + b2
+
+########## compute the class probabilities
+    exp_scores = np.exp(scores)
+    probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True) # [N x K]
+############### compute the loss: average cross-entropy loss and regularization
+    correct_logprobs = -np.log(probs[range(num_egs),y])
+    data_loss = np.sum(correct_logprobs)/num_egs
+    reg_loss = 0.5*reg*np.sum(w1*w1)+ 0.5*reg*np.sum(w2*w2)
+    loss = data_loss + reg_loss
+    if i % 10 == 0:
+        print ("iteration %d: loss %f" % (i, loss))    
+    
+    #### Gardient of Parameters#######################
+    dscores=probs
+    dscores[range(num_egs),y]-=1
+    dscores/=num_egs
+    
+    ####### Backpropagation#################
+    dw2 = np.dot(hidden_layer.T, dscores)   
+    db2 = np.sum(dscores,axis=0, keepdims=True)    
+
+    dhidden = np.dot(dscores, w2.T)
+    dhidden[hidden_layer <= 0] = 0 # backpropagate the ReLU non-linearity
+    
+    dw1 = np.dot(x.T, dhidden)
+    db1 = np.sum(dhidden, axis=0, keepdims=True)
+    
+    dw2 += reg * w2
+    dw1 += reg * w1
+    
+# perform a parameter update
+    w1 += -step_size * dw1
+    b1 += -step_size * db1
+    w2 += -step_size * dw2
+    b2 += -step_size * db2
+
+# evaluate training set accuracy
+hidden_layer = np.maximum(0, np.dot(x, w1) + b1)
+scores = np.dot(hidden_layer, w2) + b2
+predicted_class = np.argmax(scores, axis=1)
+print ('training accuracy: %.2f' % (np.mean(predicted_class == y)))
+
+
+
+
+
+# plot the resulting classifier
+h = 0.02
+x_min, x_max = x[:, 0].min() - 1, x[:, 0].max() + 1
+y_min, y_max = x[:, 1].min() - 1, x[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                     np.arange(y_min, y_max, h))
+Z = np.dot(np.maximum(0, np.dot(np.c_[xx.ravel(), yy.ravel()], w1) + b1), w2) + b2
+Z = np.argmax(Z, axis=1)
+Z = Z.reshape(xx.shape)
+fig = plt.figure()
+plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral, alpha=0.8)
+plt.scatter(x[:, 0], x[:, 1], c=y, s=40, cmap=plt.cm.Spectral)
+plt.xlim(xx.min(), xx.max())
+plt.ylim(yy.min(), yy.max())
+
+
