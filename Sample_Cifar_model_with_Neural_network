@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Aug 17 14:40:49 2018
+
+@author: ankitjha
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug 16 15:49:05 2018
+
+@author: ankitjha
+"""
+# It is an example of simple neural network with 3 layers
+#(one input layer, one hidden layer and one output layer)
+
+import numpy as np, matplotlib.pyplot as plt
+from keras.datasets import cifar10
+(x_train1,y_train1),(x_test,y_test)=cifar10.load_data()
+x_train1=np.reshape(x_train1,(x_train1.shape[0],np.prod(x_train1.shape[1:])))
+np.random.seed(0)
+#x=np.array(([2,9,5],[1,5,6],[3,6,9]),dtype=float)
+#y=np.array(([91],[90],[92]),dtype=float)
+
+x_train1=x_train1/np.mean(x_train1)
+x_train=x_train1[:100,:]
+y_train=y_train1[:100]/np.amax(y_train1)
+
+class Neural_Network(object):
+    def __init__(self):
+        self.inputSize=3072
+        self.outputSize=1
+        self.hiddenSize1=100
+        self.hiddenSize2=100
+        
+        self.w1=np.random.randn(self.inputSize,self.hiddenSize1)
+        self.w2=np.random.randn(self.hiddenSize1,self.hiddenSize2)
+        self.w3=np.random.randn(self.hiddenSize2,self.outputSize)
+        
+    def forward(self,x):
+        self.z1=np.dot(x,self.w1)
+        self.z2=self.sigmoid(self.z1)
+        self.z3=np.dot(self.z2,self.w2)
+        self.z4=self.sigmoid(self.z3)
+        self.z5=np.dot(self.z4,self.w3)
+        out=self.sigmoid(self.z5)
+        return out
+    
+    def sigmoid(self,s):
+        return 1/(1+np.exp(-s))
+    
+    def sigmoid_prime(self,s):
+        return s*(1-s)
+    
+    def backward(self,x,y,o):
+        self.o_error=y-o
+        self.o_delta=self.o_error * self.sigmoid_prime(o)
+        
+        self.z4_error=self.o_delta.dot(self.w3.T)
+        self.z4_delta=self.z4_error * self.sigmoid_prime(self.z4)
+        
+        self.z2_error=self.z4_delta.dot(self.w2.T)
+        self.z2_delta=self.z2_error * self.sigmoid_prime(self.z2)
+        
+        self.w1 +=x.T.dot(self.z2_delta)
+        self.w2 +=self.z2.T.dot(self.o_delta)
+        
+    def train(self,x,y):
+        o=self.forward(x)
+        self.backward(x,y,o)
+        
+    def visualize(self,i,l):
+        plt.plot(i,l)# plot between loss and iteration
+    
+NN=Neural_Network()
+o=NN.forward(x_train)
+temp=[]
+weight_visualize=[]
+loss_visualize=[]
+for i in range(10):
+    temp=np.append(temp,i)
+    weight_visualize=np.append(weight_visualize,np.mean(NN.w1))
+    loss_visualize=np.append(loss_visualize,np.mean(np.square(y_train-NN.forward(x_train))))
+    #print("input:\n"+str(x_train))
+    #print("actual output:\n"+str(y_train))
+    #print("predicted output:\n"+str(NN.forward(x_train)))
+    print("loss:\n"+str(np.mean(np.square(y_train-NN.forward(x_train)))))
+    print("\n")
+    
+    
+    NN.train(x_train,y_train)
+
+fig=plt.figure()
+plt.subplot(1,2,1),plt.title('iteration vs loss'),plt.xlabel('Iteration'),plt.ylabel('Loss'),NN.visualize(temp,loss_visualize)
+plt.subplot(1,2,2),plt.title('weights vs loss'),plt.xlabel('Weight'),plt.ylabel('Loss'),NN.visualize(weight_visualize,loss_visualize)
+fig.savefig('Iteration_weights_Loss.png')
